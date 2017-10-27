@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="!beaconData; else beaconFound">
+    <ion-card>
+        <ion-card-header>
+          Start Scan
+        </ion-card-header>
+        <ion-card-content>
+          <p>Click the start scan button to scan for Beacons!</p>
+          <button ion-button (click)="startScanning()">Scan</button>
+        </ion-card-content>
+    </ion-card>
+
+    <ng-template #beaconFound>
+      <ion-card>
+        <ion-card-header>
+          Beacon Found
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item>{{beaconData.address}}</ion-item>
+            <ion-item>{{beaconData.rssi}}</ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </div>
+</ion-content>
