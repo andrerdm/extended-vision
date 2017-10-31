@@ -23,7 +23,7 @@ export class HomePage {
         console.log(this.beaconData);
         setTimeout(() => {
           this.changeDetectorRef.detectChanges();
-        }, 10000);
+        }, 1500);
       }, error => console.error(error));
     });
   }

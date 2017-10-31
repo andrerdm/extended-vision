@@ -1,35 +1,37 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Extended Vision</ion-title>
   </ion-navbar>
+  <ion-toolbar color="secondary">
+    <ion-title>Locais Próximos</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
   <div *ngIf="!beaconData; else beaconFound">
     <ion-card>
         <ion-card-header>
-          Start Scan
+          Buscar
         </ion-card-header>
         <ion-card-content>
-          <p>Click the start scan button to scan for Beacons!</p>
-          <button ion-button (click)="startScanning()">Scan</button>
+          <p>Aperte no botão para começar a buscar os Beacons!</p>
+          <button ion-button (click)="startScanning()">Buscar</button>
         </ion-card-content>
     </ion-card>
-
-    <ng-template #beaconFound>
-      <ion-card>
-        <ion-card-header>
-          Beacon Found
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list>
-            <ion-item>{{beaconData.address}}</ion-item>
-            <ion-item>{{beaconData.rssi}}</ion-item>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </ng-template>
   </div>
+
+  <ng-template #beaconFound>
+    <ion-card>
+      <ion-card-header>
+        Beacons Encontrados
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>Id: {{beaconData.address}}</ion-item>
+          <ion-item>Força do Sinal: {{beaconData.rssi}}</ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+  
 </ion-content>
