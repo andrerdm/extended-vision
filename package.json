@@ -1,8 +1,8 @@
 {
-    "name": "ionic-hello-world",
-    "version": "0.0.0",
-    "author": "Ionic Framework",
-    "homepage": "http://ionicframework.com/",
+    "name": "extended-vision",
+    "version": "1.0.0",
+    "author": "Dev Team",
+    "homepage": "",
     "private": true,
     "scripts": {
         "clean": "ionic-app-scripts clean",
@@ -51,7 +51,7 @@
         "ionic-plugin-keyboard"
     ],
     "cordovaPlatforms": [],
-    "description": "myApp: An Ionic project",
+    "description": "extended-vision",
     "cordova": {
         "plugins": {
             "cordova-plugin-eddystone": {},
