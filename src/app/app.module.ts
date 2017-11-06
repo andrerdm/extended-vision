@@ -8,6 +8,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { AuthProvider } from '../providers/auth/auth';
+import { DataProvider } from '../providers/data/data';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 
@@ -41,7 +42,8 @@ const firebaseConfig = {
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider
+    AuthProvider,
+    DataProvider
   ]
 })
 export class AppModule {}
