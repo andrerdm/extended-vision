@@ -13,9 +13,8 @@ import { Beacon } from '../../models/Beacon';
 })
 export class HomePage {
   
-  beaconList: FirebaseListObservable<BeaconData[]>;
-  beaconsFound: BeaconData[];
-  beacon: Beacon;
+  beaconListDatabase: BeaconData[] = new Array();
+  beaconsFound: BeaconData[] = new Array();
 
   constructor(
     public navCtrl: NavController, 
@@ -33,19 +32,25 @@ export class HomePage {
 
   startScanning() {
     this.platform.ready().then(() => {
+      console.log("#############################");
+      console.log("INICIANDO PESQUISA DE BEACONS");
+      console.log("#############################");
       evothings.eddystone.startScan((data) => {
-        setTimeout(() => {this.changeDetectorRef.detectChanges();}, 1500);
-        
+        setTimeout(() => this.changeDetectorRef.detectChanges(), 1500);
+
         let beacon: Beacon = data;
 
-        this.beaconList.forEach(item => {
-          item.forEach(data => {
+        this.beaconListDatabase.forEach((b) => {
 
-            if (beacon.address != data.id) {
-              this.beaconsFound[0] = data;
-            } 
+          if (b.id != data.address) {
+            
+            let alreadyExists = this.beaconsFound.find(i => i.id == b.id);
+            if (!alreadyExists) {
+              console.log('Beacon encontrado: '+ b.id);              
+              this.beaconsFound.push(b);
+            }
 
-          });
+          }
         });
 
       }, error => console.error(error));
@@ -53,7 +58,14 @@ export class HomePage {
   }
 
   listFromDatabate() {
-    this.beaconList = this.dataProvider.list();  
+    let listObservable = this.dataProvider.list();
+    listObservable.subscribe(sub => {
+      console.log("########################################");
+      console.log("Atualizando lista de Beacons do Firebase");
+      console.log("########################################"); 
+      this.beaconListDatabase = sub;
+      console.log(this.beaconListDatabase);
+    });
   }
 
 }
