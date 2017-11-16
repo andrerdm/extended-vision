@@ -1,15 +1,21 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
+import { FirebaseListObservable } from 'angularfire2/database'
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { DataProvider } from '../../providers/data/data';
+import { BeaconData } from '../../providers/data/beaconData';
+import { Beacon } from '../../models/Beacon';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  beaconData: any;
+  
+  beaconList: FirebaseListObservable<BeaconData[]>;
+  beaconsFound: BeaconData[];
+  beacon: Beacon;
 
   constructor(
     public navCtrl: NavController, 
@@ -21,8 +27,8 @@ export class HomePage {
   }
 
   initializeApp() {
-    this.signInWithEmail();
-    //this.startScanning();
+    this.listFromDatabate();
+    this.startScanning();
   }
 
   startScanning() {
@@ -30,44 +36,24 @@ export class HomePage {
       evothings.eddystone.startScan((data) => {
         setTimeout(() => {this.changeDetectorRef.detectChanges();}, 1500);
         
-        console.log(data);
+        let beacon: Beacon = data;
+
+        this.beaconList.forEach(item => {
+          item.forEach(data => {
+
+            if (beacon.address != data.id) {
+              this.beaconsFound[0] = data;
+            } 
+
+          });
+        });
 
       }, error => console.error(error));
     });
   }
 
-  signInWithEmail() {
-    this.auth.signInWithEmailAndPassword("extended-vision@app.com", "3xt3nd3d")
-    .then((data) => {
-      console.log("Dados do usuario Logado");
-      console.log(data);
-      this.listFromDatabate();
-    }, (error) => {
-      let errorMessage: String;
-
-      switch (error.code) {
-        case 'auth/invalid-email':
-          errorMessage = 'Insira um email válido.';
-          break;
-        case 'auth/wrong-password':
-          errorMessage = 'Combinação de usuário e senha incorreta.';
-          break;
-        case 'auth/user-not-found':
-          errorMessage = 'Combinação de usuário e senha incorreta.';
-          break;
-        default:
-          errorMessage = error;
-          break;
-      }
-      console.log(errorMessage);
-    });
-  }
-
   listFromDatabate() {
-    this.beaconData = this.dataProvider.list();
-
-    console.log("Listando beacons do DB");
-    console.log(this.beaconData);
+    this.beaconList = this.dataProvider.list();  
   }
 
 }

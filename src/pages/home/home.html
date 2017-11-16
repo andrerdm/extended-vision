@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content padding>
-  <div *ngIf="!beaconData; else beaconFound">
+  <div *ngIf="!beaconsFound; else beaconFound">
     <ion-card>
       <ion-card-header class="my-beacons-header">Procurando...</ion-card-header>
       <ion-card-content>
@@ -18,12 +18,12 @@
   </div>
 
   <ng-template #beaconFound>
-    <ion-card>
+    <ion-card *ngFor="let item of beaconsFound | async">
       <ion-card-content>
         <ion-list>
-          <ion-icon name="star"></ion-icon>
-          <ion-item>Id: {{beaconData.address}}</ion-item>
-          <ion-item>Força do Sinal: {{beaconData.rssi}}</ion-item>
+          <ion-item>{{item.name}}</ion-item>
+          <ion-item>Id: {{item.id}}</ion-item>
+          <ion-item>Mensagem: {{item.message}}</ion-item>
         </ion-list>
       </ion-card-content>
     </ion-card>
