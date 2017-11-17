@@ -1,6 +1,6 @@
 export class BeaconData {
-    public id: String;
-    public message: String;
-    public name: String;
-    public company: String;
+    public id: string;
+    public message: string;
+    public name: string;
+    public company: string;
 }

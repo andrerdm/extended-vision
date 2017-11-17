@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
-import { FirebaseListObservable } from 'angularfire2/database'
+import { FirebaseListObservable } from 'angularfire2/database';
+import { TextToSpeech } from '@ionic-native/text-to-speech';
 
 import { AuthProvider } from '../../providers/auth/auth';
 import { DataProvider } from '../../providers/data/data';
@@ -15,14 +16,15 @@ export class HomePage {
   
   beaconListDatabase: BeaconData[] = new Array();
   beaconsFound: BeaconData[] = new Array();
-  rssi: number = -75;
+  rssi: number = -65;
 
   constructor(
     public navCtrl: NavController, 
     public platform: Platform, 
     public changeDetectorRef: ChangeDetectorRef,
     public auth: AuthProvider,
-    public dataProvider: DataProvider) {
+    public dataProvider: DataProvider,
+    public tts: TextToSpeech) {
       this.initializeApp();
   }
 
@@ -52,7 +54,7 @@ export class HomePage {
 
         this.beaconListDatabase.forEach((b) => {
 
-          if (b.id == data.address) {
+          if (b.id != data.address) {
             
             if (data.rssi > this.rssi) {
               this.addBeacon(b);
@@ -72,7 +74,16 @@ export class HomePage {
     if (!alreadyExists) {
       console.log('Beacon encontrado: '+ b.id);              
       this.beaconsFound.push(b);
+      this.speakMsg(b.message);
     }
+  }
+
+  speakMsg(msg: string) {
+    this.tts.speak({
+      text: msg,
+      locale: 'pt-BR',
+      rate: 1
+    });
   }
 
   removeBeacon(b: BeaconData) {
