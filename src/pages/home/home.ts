@@ -15,6 +15,7 @@ export class HomePage {
   
   beaconListDatabase: BeaconData[] = new Array();
   beaconsFound: BeaconData[] = new Array();
+  rssi: number = -75;
 
   constructor(
     public navCtrl: NavController, 
@@ -30,33 +31,6 @@ export class HomePage {
     this.startScanning();
   }
 
-  startScanning() {
-    this.platform.ready().then(() => {
-      console.log("#############################");
-      console.log("INICIANDO PESQUISA DE BEACONS");
-      console.log("#############################");
-      evothings.eddystone.startScan((data) => {
-        setTimeout(() => this.changeDetectorRef.detectChanges(), 1500);
-
-        let beacon: Beacon = data;
-
-        this.beaconListDatabase.forEach((b) => {
-
-          if (b.id != data.address) {
-            
-            let alreadyExists = this.beaconsFound.find(i => i.id == b.id);
-            if (!alreadyExists) {
-              console.log('Beacon encontrado: '+ b.id);              
-              this.beaconsFound.push(b);
-            }
-
-          }
-        });
-
-      }, error => console.error(error));
-    });
-  }
-
   listFromDatabate() {
     let listObservable = this.dataProvider.list();
     listObservable.subscribe(sub => {
@@ -66,6 +40,46 @@ export class HomePage {
       this.beaconListDatabase = sub;
       console.log(this.beaconListDatabase);
     });
+  }
+
+  startScanning() {
+    this.platform.ready().then(() => {
+      console.log("#############################");
+      console.log("INICIANDO PESQUISA DE BEACONS");
+      console.log("#############################");
+      evothings.eddystone.startScan((data) => {
+        setTimeout(() => this.changeDetectorRef.detectChanges(), 2000);
+
+        this.beaconListDatabase.forEach((b) => {
+
+          if (b.id == data.address) {
+            
+            if (data.rssi > this.rssi) {
+              this.addBeacon(b);
+            } else {
+              this.removeBeacon(b);
+            }
+            
+          }
+        });
+
+      }, error => console.error(error));
+    });
+  }
+
+  addBeacon(b: BeaconData) {
+    let alreadyExists = this.beaconsFound.find(i => i.id == b.id);
+    if (!alreadyExists) {
+      console.log('Beacon encontrado: '+ b.id);              
+      this.beaconsFound.push(b);
+    }
+  }
+
+  removeBeacon(b: BeaconData) {
+    let index = this.beaconsFound.indexOf(b);
+    if (index > -1) {
+      this.beaconsFound.splice(index);
+    }
   }
 
 }
