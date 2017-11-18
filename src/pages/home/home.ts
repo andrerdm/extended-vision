@@ -54,7 +54,7 @@ export class HomePage {
 
         this.beaconListDatabase.forEach((b) => {
 
-          if (b.id == data.address) {
+          if (b.id != data.address) { /// se loko?
             
             if (data.rssi > this.rssi) {
               this.addBeacon(b);
