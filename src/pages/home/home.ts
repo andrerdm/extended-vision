@@ -15,7 +15,7 @@ export class HomePage {
   
   beaconListDatabase: BeaconData[] = new Array();
   beaconsFound: BeaconData[] = new Array();
-  rssi: number = -65;
+  rssi: number = -70;
 
   constructor(
     public navCtrl: NavController, 
