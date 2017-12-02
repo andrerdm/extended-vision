@@ -15,7 +15,6 @@ export class HomePage {
   
   beaconListDatabase: BeaconData[] = new Array();
   beaconsFound: BeaconData[] = new Array();
-  rssi: number = -70;
 
   constructor(
     public navCtrl: NavController, 
@@ -49,16 +48,20 @@ export class HomePage {
       console.log("INICIANDO PESQUISA DE BEACONS");
       console.log("#############################");
       evothings.eddystone.startScan((data) => {
-        setTimeout(() => this.changeDetectorRef.detectChanges(), 2000);
+        setTimeout(() => this.changeDetectorRef.detectChanges(), 2500);
 
         this.beaconListDatabase.forEach((b) => {
 
           if (b.id == data.address) { 
-            
-            if (data.rssi > this.rssi) {
+            let distance = data.rssi * -1;
+            let minimumDistance = this.getMinimumDistance(b) * -1;
+
+            if (distance < minimumDistance) {
               this.addBeacon(b);
             } else {
-              this.removeBeacon(b);
+              if (distance - minimumDistance > 5) {
+                this.removeBeacon(b);
+              }
             }
             
           }
@@ -66,6 +69,22 @@ export class HomePage {
 
       }, error => console.error(error));
     });
+  }
+
+  getMinimumDistance(b: BeaconData) :number {
+    let value = b.signalStrength;
+
+    switch (value) {
+      case 1:
+        return -70;
+      case 2:
+        return -80;
+      case 3:
+        return -90;
+      default:
+        return -100;
+    }
+
   }
 
   addBeacon(b: BeaconData) {
@@ -81,7 +100,7 @@ export class HomePage {
     this.tts.speak({
       text: msg,
       locale: 'pt-BR',
-      rate: 1
+      rate: 0.8
     });
   }
 
