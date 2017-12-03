@@ -34,9 +34,6 @@ export class HomePage {
   listFromDatabate() {
     let listObservable = this.dataProvider.list();
     listObservable.subscribe(sub => {
-      console.log("########################################");
-      console.log("Atualizando lista de Beacons do Firebase");
-      console.log("########################################"); 
       this.beaconListDatabase = sub;
       console.log(this.beaconListDatabase);
     });
@@ -44,9 +41,6 @@ export class HomePage {
 
   startScanning() {
     this.platform.ready().then(() => {
-      console.log("#############################");
-      console.log("INICIANDO PESQUISA DE BEACONS");
-      console.log("#############################");
       evothings.eddystone.startScan((data) => {
         setTimeout(() => this.changeDetectorRef.detectChanges(), 2500);
 
@@ -63,18 +57,14 @@ export class HomePage {
                 this.removeBeacon(b);
               }
             }
-            
           }
         });
-
       }, error => console.error(error));
     });
   }
 
   getMinimumDistance(b: BeaconData) :number {
-    let value = b.signalStrength;
-
-    switch (value) {
+    switch (b.signalStrength) {
       case 1:
         return -70;
       case 2:
