@@ -3,5 +3,5 @@ export class BeaconData {
     public message: string;
     public name: string;
     public company: string;
-    public signalStrength : number;
+    public signalStrength : string;
 }

@@ -35,6 +35,7 @@ export class HomePage {
     let listObservable = this.dataProvider.list();
     listObservable.subscribe(sub => {
       this.beaconListDatabase = sub;
+      console.log("Lista do banco de dados");
       console.log(this.beaconListDatabase);
     });
   }
@@ -65,11 +66,11 @@ export class HomePage {
 
   getMinimumDistance(b: BeaconData) :number {
     switch (b.signalStrength) {
-      case 1:
-        return -70;
-      case 2:
-        return -80;
-      case 3:
+      case '1':
+        return -72;
+      case '2':
+        return -82;
+      case '3':
         return -90;
       default:
         return -100;
@@ -95,7 +96,7 @@ export class HomePage {
   }
 
   removeBeacon(b: BeaconData) {
-    let index = this.beaconsFound.indexOf(b);
+    let index = this.beaconsFound.findIndex(i => i.id == b.id);
     if (index > -1) {
       this.beaconsFound.splice(index);
     }
