@@ -43,7 +43,7 @@ export class HomePage {
   startScanning() {
     this.platform.ready().then(() => {
       evothings.eddystone.startScan((data) => {
-        setTimeout(() => this.changeDetectorRef.detectChanges(), 2500);
+        setTimeout(() => this.changeDetectorRef.detectChanges(), 1000);
 
         this.beaconListDatabase.forEach((b) => {
 
@@ -54,7 +54,7 @@ export class HomePage {
             if (distance < minimumDistance) {
               this.addBeacon(b);
             } else {
-              if (distance - minimumDistance > 5) {
+              if (distance - minimumDistance > 4) {
                 this.removeBeacon(b);
               }
             }
